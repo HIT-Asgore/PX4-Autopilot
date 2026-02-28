@@ -69,3 +69,15 @@ add_custom_target(none_iris
 		${PX4_SOURCE_DIR}/ROMFS/px4fmu_common/init.d-posix/airframes/10016_none_iris
 	COMMENT "launching px4 none_iris (SYS_AUTOSTART=10016)"
 )
+
+
+# ue_custom_drone (launch helper for custom SITL airframe)
+add_custom_target(ue_custom_drone
+	COMMAND ${CMAKE_COMMAND} -E env PX4_SYS_AUTOSTART=22001 $<TARGET_FILE:px4>
+	WORKING_DIRECTORY ${SITL_WORKING_DIR}
+	USES_TERMINAL
+	DEPENDS
+		px4
+		${PX4_SOURCE_DIR}/ROMFS/px4fmu_common/init.d-posix/airframes/22001_UE_custom_drone
+	COMMENT "launching px4 ue_custom_drone (SYS_AUTOSTART=22001)"
+)

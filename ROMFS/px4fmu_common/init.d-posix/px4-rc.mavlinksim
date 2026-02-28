@@ -11,17 +11,18 @@ simulator_tcp_port=$((4560+px4_instance))
 # Check if PX4_SIM_HOSTNAME environment variable is empty
 # If empty check if PX4_SIM_HOST_ADDR environment variable is empty
 # If both are empty use localhost for simulator
-if [ -z "${PX4_SIM_HOSTNAME}" ]; then
-
-	if [ -z "${PX4_SIM_HOST_ADDR}" ]; then
-		echo "INFO  [init] PX4_SIM_HOSTNAME: localhost"
-		simulator_mavlink start -c $simulator_tcp_port
-	else
-		echo "INFO  [init] PX4_SIM_HOSTNAME: ${PX4_SIM_HOST_ADDR}"
-		simulator_mavlink start -t "${PX4_SIM_HOST_ADDR}" "${simulator_tcp_port}"
-	fi
-
+if [ -n "${PX4_SIM_UDP}" ]; then
+    echo "INFO  [init] Using UDP for simulator (PX4_SIM_UDP=1)"
+    simulator_mavlink start -u $simulator_tcp_port
 else
-	echo "INFO  [init] PX4_SIM_HOSTNAME: ${PX4_SIM_HOSTNAME}"
-	simulator_mavlink start -h "${PX4_SIM_HOSTNAME}" "${simulator_tcp_port}"
+    # 原有 TCP 逻辑
+    if [ -z "${PX4_SIM_HOSTNAME}" ]; then
+        if [ -z "${PX4_SIM_HOST_ADDR}" ]; then
+            simulator_mavlink start -c $simulator_tcp_port
+        else
+            simulator_mavlink start -t "${PX4_SIM_HOST_ADDR}" "${simulator_tcp_port}"
+        fi
+    else
+        simulator_mavlink start -h "${PX4_SIM_HOSTNAME}" "${simulator_tcp_port}"
+    fi
 fi
