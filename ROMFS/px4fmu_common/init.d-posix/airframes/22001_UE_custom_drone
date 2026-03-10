@@ -1,8 +1,4 @@
 #!/bin/sh
-#
-# @name AirSim QuadX (match UE)
-# @type Quadrotor Wide
-#
 
 . ${R}etc/init.d/rc.mc_defaults
 
@@ -16,31 +12,30 @@ param set-default CA_ROTOR_COUNT 4
 # KM值是定义了推力（Thrust）与偏航力矩（Yaw Moment）之间的关系
 # YAW_TORQUE = KM * THRUST
 
-
-param set-default CA_ROTOR0_PX 0.1608
-param set-default CA_ROTOR0_PY 0.1608
-param set-default CA_ROTOR0_KM 0.0133
+param set-default CA_ROTOR0_PX 0.15
+param set-default CA_ROTOR0_PY 0.15
+param set-default CA_ROTOR0_PZ 0.08
+param set-default CA_ROTOR0_KM 0.0177
 #param set-default CA_ROTOR0_KM 0.0189
 
-param set-default CA_ROTOR1_PX -0.1608
-param set-default CA_ROTOR1_PY -0.1608
-param set-default CA_ROTOR1_KM 0.0133
+
+param set-default CA_ROTOR1_PX -0.15
+param set-default CA_ROTOR1_PY -0.15
+param set-default CA_ROTOR1_PZ 0.08
+param set-default CA_ROTOR1_KM 0.0177
 # param set-default CA_ROTOR1_KM 0.0189
 
-param set-default CA_ROTOR2_PX 0.1608
-param set-default CA_ROTOR2_PY -0.1608
-param set-default CA_ROTOR2_KM -0.0133
+param set-default CA_ROTOR2_PX 0.15
+param set-default CA_ROTOR2_PY -0.15
+param set-default CA_ROTOR2_PZ 0.08
+param set-default CA_ROTOR2_KM -0.0177
 # param set-default CA_ROTOR2_KM -0.0189
 
-param set-default CA_ROTOR3_PX -0.1608
-param set-default CA_ROTOR3_PY 0.1608
-param set-default CA_ROTOR3_KM -0.0133
+param set-default CA_ROTOR3_PX -0.15
+param set-default CA_ROTOR3_PY 0.15
+param set-default CA_ROTOR3_PZ 0.08
+param set-default CA_ROTOR3_KM -0.0177
 #param set-default CA_ROTOR3_KM -0.0189
-
-# param set-default MC_ROLLRATE_P 0.1
-# param set-default MC_PITCHRATE_P 0.1
-# param set-default MC_YAWRATE_P 0.12
-
 
 
 param set-default PWM_MAIN_FUNC1 101
@@ -52,12 +47,21 @@ param set-default PWM_MAIN_FUNC4 104
 param set MPC_XY_VEL_MAX 70.0
 param set MPC_Z_VEL_MAX_UP 70.0
 param set MPC_Z_VEL_MAX_DN 70.0
+
+# 修改角速度的限制
+param set MC_ROLLRATE_MAX 720.0
+param set MC_PITCHRATE_MAX 720.0
+param set MC_YAWRATE_MAX 720.0
+
+
+
+
 # 无人机的最大倾角
 param set MPC_TILTMAX_AIR 90.0
 
 # IMU率，这个参数应该是我们实现高频控制的关键
 # 取值为100~2000HZ，四旋翼默认为800
-param set IMU_GYRO_RATEMAX 1000
+param set IMU_GYRO_RATEMAX 800
 
-# 提高 EKF2 积分频率以支持 1000 Hz 控制环路
-param set IMU_INTEG_RATE 1000
+# 提高 EKF2 积分频率以支持 高 Hz 控制环路,可以在这里进行更改，以实现高HZ的控制频率，比如1000
+param set IMU_INTEG_RATE 250
