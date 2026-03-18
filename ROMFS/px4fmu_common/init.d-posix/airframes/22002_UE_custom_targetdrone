@@ -1,9 +1,14 @@
 #!/bin/sh
+# @name UE_custom_targetdrone
+# ./build/px4_sitl_default/bin/px4 -i 1 -d "$PWD/ROMFS/px4fmu_common" -s etc/init.d-posix/rcS
+
+
 
 . ${R}etc/init.d/rc.mc_defaults
 
 # 使用 UDP 与 UE 仿真通信
 export PX4_SIM_UDP=1
+# export PX4_SIM_UDP_PORT=4570
 
 
 param set-default CA_AIRFRAME 0
@@ -56,7 +61,7 @@ param set MC_YAWRATE_MAX 720.0
 
 
 # 无人机的最大倾角
-param set MPC_TILTMAX_AIR 90.0
+param set MPC_TILTMAX_AIR 10.0
 
 # IMU率，这个参数应该是我们实现高频控制的关键
 # 取值为100~2000HZ，四旋翼默认为800
@@ -110,6 +115,7 @@ param set MPC_Z_P 1.0
 param set MPC_Z_VEL_P_ACC 4.0
 param set MPC_Z_VEL_I_ACC 2.0
 param set MPC_Z_VEL_D_ACC 0.0
+
 
 
 

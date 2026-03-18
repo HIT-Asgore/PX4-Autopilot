@@ -112,6 +112,7 @@ px4_add_romfs_files(
 	17002_flightgear_tf-g2
 
 	22001_UE_custom_drone
+	22002_UE_custom_targetdrone
 
 	50000_gz_rover_differential
 	51000_gz_rover_ackermann

@@ -6,23 +6,26 @@ param set-default EKF2_GPS_DELAY 10
 param set-default EKF2_MULTI_IMU 3
 param set-default SENS_IMU_MODE 0
 
-simulator_tcp_port=$((4560+px4_instance))
+# 默认端口（兼容多实例）
+default_sim_port=$((4560+px4_instance))
+# 允许外部覆盖：export PX4_SIM_UDP_PORT=4570
+simulator_udp_port=${PX4_SIM_UDP_PORT:-$default_sim_port}
 
 # Check if PX4_SIM_HOSTNAME environment variable is empty
 # If empty check if PX4_SIM_HOST_ADDR environment variable is empty
 # If both are empty use localhost for simulator
 if [ -n "${PX4_SIM_UDP}" ]; then
-    echo "INFO  [init] Using UDP for simulator (PX4_SIM_UDP=1)"
-    simulator_mavlink start -u $simulator_tcp_port
+    echo "INFO  [init] Using UDP for simulator (PX4_SIM_UDP=1, port=${simulator_udp_port})"
+    simulator_mavlink start -u "${simulator_udp_port}"
 else
     # 原有 TCP 逻辑
     if [ -z "${PX4_SIM_HOSTNAME}" ]; then
         if [ -z "${PX4_SIM_HOST_ADDR}" ]; then
-            simulator_mavlink start -c $simulator_tcp_port
+            simulator_mavlink start -c "${default_sim_port}"
         else
-            simulator_mavlink start -t "${PX4_SIM_HOST_ADDR}" "${simulator_tcp_port}"
+            simulator_mavlink start -t "${PX4_SIM_HOST_ADDR}" "${default_sim_port}"
         fi
     else
-        simulator_mavlink start -h "${PX4_SIM_HOSTNAME}" "${simulator_tcp_port}"
+        simulator_mavlink start -h "${PX4_SIM_HOSTNAME}" "${default_sim_port}"
     fi
 fi
